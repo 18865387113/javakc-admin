@@ -54,7 +54,36 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
+  {
+    path: '/cms/book',
+    component: Layout,
+    redirect: '/cms/book',
+    name: 'Book', // ## 每个路由name不能相同
+    meta: { title: '书籍管理', icon: 'example' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'list',
+        name: 'CmsBookList',
+        component: () => import('@/views/cms/book/list'),
+        meta: { title: '书籍列表', icon: 'table' }
+      },
+      {
+        path: 'create',
+        name: 'CmsBookCreate',
+        component: () => import('@/views/cms/book/create'),
+        meta: { title: '添加书籍', icon: 'form' },
+        hidden: true
+      },
+      {
+        path: 'update/:id', // ## :id 相当于占位符,要传参数
+        name: 'CmsBookUpdate',
+        component: () => import('@/views/cms/book/update'),
+        meta: { title: '编辑书籍', noCache: true },
+        hidden: true
+      }
+    ]
+  },
   {
     path: '/example',
     component: Layout,
