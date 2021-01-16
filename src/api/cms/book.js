@@ -10,5 +10,13 @@ export default {
       method: 'post',
       data: bookQuery
     })
+  },
+  // ## 添加书籍
+  saveBook(book) {
+    return request({
+      url: `${api_name}/saveBook`,
+      method: 'post',
+      data: book
+    })
   }
 }

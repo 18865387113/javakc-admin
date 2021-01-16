@@ -1,5 +1,37 @@
 <template>
   <div id="app-container">
+    <!-- 查询表单 -->
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item>
+        <el-input v-model="bookQuery.bookName" placeholder="书名" />
+      </el-form-item>
+
+      <el-form-item label="授权开始时间">
+        <el-date-picker
+          v-model="bookQuery.beginDate"
+          type="datetime"
+          placeholder="选择开始时间"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+        />
+      </el-form-item>
+
+      <el-form-item>
+        <el-date-picker
+          v-model="bookQuery.endDate"
+          type="datetime"
+          placeholder="选择截止时间"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+        />
+      </el-form-item>
+
+      <el-button type="primary" @click="getPageBookList()">查询</el-button>
+      <el-button type="primary" @click="resetData()">清空</el-button>
+      <router-link :to="'/cms/book/create'">
+        <el-button type="primary">添加书籍</el-button>
+      </router-link>
+    </el-form>
     <el-table :data="bookList" border fit highlight-current-row>
       <el-table-column label="序号" width="70" align="center">
         <template slot-scope="scope">
@@ -13,7 +45,7 @@
       <el-table-column prop="level2Id" label="二级分类" />
       <el-table-column label="连载">
         <template slot-scope="scope">
-          {{ scope.row.isSerialize === 1 ? '是' : '否'}}
+          {{ scope.row.isSerialize === 1 ? '连载中' : '完结'}}
         </template>
       </el-table-column>
       <el-table-column prop="wordNumber" label="字数" />
@@ -50,6 +82,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      :page-size="pageSize"
+      :current-page="pageNo"
+      :total="total"
+      :pager-count="11"
+      style="padding: 30px 0; text-align: center;"
+      layout="total, prev, pager, next, jumper"
+      @current-change="getPageBookList">
+    </el-pagination>
   </div>
 </template>
 
@@ -93,6 +135,12 @@
         for (let k in o)
           if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
         return fmt
+      },
+      resetData() { // ## 清空方法
+                    // ##清空所有值
+        this.bookQuery = {}
+        // ##查询所有数据
+        this.getPageBookList()
       }
     }
   }
