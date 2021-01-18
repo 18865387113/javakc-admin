@@ -22,11 +22,11 @@
           placeholder="选择开始时间"
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00"
-          />
+        />
       </el-form-item>
       <el-form-item label="授权结束时间">
         <el-date-picker
-          v-model="book.grantStartTime"
+          v-model="book.grantEndTime"
           type="datetime"
           placeholder="选择结束时间"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+  import book from '@/api/cms/book'
   export default {
     data() {
       return {
@@ -74,6 +75,19 @@
     created() {
     },
     methods: {
+      saveBook() {
+        this.saveBtnDisabled = true // ##禁用保存按钮
+        book.saveBook(this.book)
+          .then(response => {
+            // ## 提示信息
+            this.$message({
+              type: 'success',
+              message: '添加成功!'
+            })
+            // ## 回到list页面,重定向功能
+            this.$router.push('/cms/book/list')
+          })
+      }
     }
   }
 </script>

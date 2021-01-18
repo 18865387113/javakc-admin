@@ -141,6 +141,45 @@
         this.bookQuery = {}
         // ##查询所有数据
         this.getPageBookList()
+      },
+      deleteBook(id, status) { // ## 删除书籍
+        if (status === 1) {
+          this.$message({
+            type: 'error',
+            message: '上线书籍不允许删除!'
+          })
+          return
+        }
+        this.$confirm('此操作将永久删除该书籍记录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          book.deleteById(id)
+            .then(response => {
+              this.getPageBookList()
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            })
+        })
+      },
+      upOrDownBook(bookId, status) { // ## 设置书籍上下架
+        this.$confirm('此操作将改变书籍上下线记录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          book.upOrDownBook(bookId, status)
+            .then(response => {
+              this.getPageBookList()
+              this.$message({
+                type: 'success',
+                message: '设置成功!'
+              })
+            })
+        })
       }
     }
   }
